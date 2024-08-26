@@ -31,20 +31,27 @@ class ContactResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')->required(),
+                TextInput::make('name')
+                ->label('نام')
+                ->required(),
 
-                TextInput::make('email')->email(),
+                TextInput::make('email')
+                ->label('ایمیل')
+                ->email(),
 
                 // Select::make('group_id')->relationship('group', 'name')->nullable(),
                 Select::make('group_id')
-                    ->label('Group')
+                    ->label('گروه')
                     ->options(Group::all()->pluck('name', 'id'))
                     ->searchable(),
 
                 Repeater::make('phoneNumbers')
+                    ->label('شماره ها')
                     ->relationship('phoneNumbers')
                     ->schema([
-                        TextInput::make('number')->required(),
+                        TextInput::make('number')
+                        ->label('شماره')
+                        ->required(),
                     ]),
             ]);
     }
@@ -53,20 +60,26 @@ class ContactResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name')->sortable()->searchable(),
-                TextColumn::make('email')->sortable()->searchable(),
-                TextColumn::make('group.name')->label('Group')->sortable()->searchable(),
-                TextColumn::make('phoneNumbers.number')->label('Phone Numbers')->sortable(),
+                TextColumn::make('name')
+                ->label('نام')
+                ->sortable()->searchable(),
+                TextColumn::make('email')
+                ->label('ایمیل')
+                ->sortable()->searchable(),
+                TextColumn::make('group.name')
+                ->label('گروه')->sortable()->searchable(),
+                TextColumn::make('phoneNumbers.number')
+                ->label('شماره ها')->sortable(),
             ])
             ->filters([
                 //SelectFilter: این فیلتر به شما اجازه می‌دهد که مخاطبین را بر اساس گروه آن‌ها فیلتر کنید.
                 SelectFilter::make('group')
                     ->relationship('group', 'name')
-                    ->label('Group')
+                    ->label('گروه')
                     ->searchable(),
                 //Custom Filter: این فیلتر به شما اجازه می‌دهد که مخاطبینی که حداقل یک شماره تلفن دارند را فیلتر کنید.
                 Filter::make('has_number')
-                    ->label('Has Phone Number')
+                    ->label('شماره تلفن')
                     ->query(fn (Builder $query): Builder => $query->whereHas('phoneNumbers')),
             ])
             ->actions([
@@ -93,5 +106,14 @@ class ContactResource extends Resource
             'create' => Pages\CreateContact::route('/create'),
             'edit' => Pages\EditContact::route('/{record}/edit'),
         ];
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('مخاطب');
+    }
+    public static function getPluralModelLabel(): string
+    {
+        return __('مخاطبین');
     }
 }

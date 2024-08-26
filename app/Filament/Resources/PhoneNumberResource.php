@@ -26,8 +26,8 @@ class PhoneNumberResource extends Resource
     {
         return $form
             ->schema([
-                Select::make('contact_id')->relationship('contact', 'name')->required(),
-                TextInput::make('number')->required(),
+                Select::make('contact_id')->label('مخاطب')->relationship('contact', 'name')->required(),
+                TextInput::make('number')->label('شماره')->required(),
             ]);
     }
 
@@ -35,8 +35,8 @@ class PhoneNumberResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('contact.name')->label('Contact')->sortable()->searchable(),
-                TextColumn::make('number')->sortable()->searchable(),
+                TextColumn::make('contact.name')->label('مخاطب')->sortable()->searchable(),
+                TextColumn::make('number')->label('شماره')->sortable()->searchable(),
             ])
             ->filters([
                 //
@@ -65,5 +65,14 @@ class PhoneNumberResource extends Resource
             'create' => Pages\CreatePhoneNumber::route('/create'),
             'edit' => Pages\EditPhoneNumber::route('/{record}/edit'),
         ];
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('شماره');
+    }
+    public static function getPluralModelLabel(): string
+    {
+        return __('شماره ها');
     }
 }

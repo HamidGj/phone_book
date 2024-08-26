@@ -25,7 +25,9 @@ class GroupResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')->required(),
+                TextInput::make('name')
+                ->label('نام')
+                ->required(),
             ]);
     }
 
@@ -33,8 +35,10 @@ class GroupResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name')->sortable()->searchable(),
-                TextColumn::make('contacts_count')->label('Contacts')->counts('contacts'),
+                TextColumn::make('name')
+                ->label('نام')
+                ->sortable()->searchable(),
+                TextColumn::make('contacts_count')->label('مخاطبین')->counts('contacts'),
             ])
             ->filters([
                 //
@@ -63,5 +67,14 @@ class GroupResource extends Resource
             'create' => Pages\CreateGroup::route('/create'),
             'edit' => Pages\EditGroup::route('/{record}/edit'),
         ];
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('گروه');
+    }
+    public static function getPluralModelLabel(): string
+    {
+        return __('گروه ها');
     }
 }
